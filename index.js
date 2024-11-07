@@ -1,20 +1,24 @@
-// index.js (Node.js server)
 import express from 'express';
 import fetch from 'node-fetch';
-import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+// Get the directory of the current file using ES module syntax
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Middleware to parse incoming JSON requests
 app.use(express.json());
 
 // Serve static files (like index.html, CSS, JS) from the 'public' directory
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(`${__dirname}/public`));
 
-// Serve the index.html file from the 'public' folder when the root URL is accessed
+// Serve index.html when the root URL is accessed
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(`${__dirname}/public/index.html`);
 });
 
 // Handle CAPTCHA verification from the front-end
